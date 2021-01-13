@@ -64,12 +64,14 @@ jobs:
           git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git
           git clone https://github.com/jerrykuku/luci-app-argon-config.git
           git clone https://github.com/jerrykuku/luci-app-vssr.git
-          df -h
 
-      - name: 更新feeds
+      - name: Update feeds
         run: |
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          make defconfig
+          make -j8 download
+          make -j$(($(nproc) + 1)) V=s
 
       - name: Generate configuration file
         run: |
